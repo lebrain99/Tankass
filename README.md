@@ -250,6 +250,15 @@
             color: white;
         }
         
+        #high-score {
+            font-size: 1.2rem;
+            margin: 10px 0;
+            color: #b2dfdb;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+        
         .clean-spot {
             position: absolute;
             width: 120px;
@@ -378,6 +387,8 @@
                 <h1>TANKASS</h1>
                 <h2>Trash Sorting Challenge</h2>
                 
+                <div id="high-score-display"></div>
+                
                 <div id="instructions">
                     <h3>How to Play:</h3>
                     <ul>
@@ -450,6 +461,7 @@
             <div id="tankass"></div>
             <div id="message"></div>
             <div id="final-score"></div>
+            <div id="high-score"></div>
             <button id="restart-btn">Play Again</button>
         </div>
     </div>
@@ -466,6 +478,11 @@
         let trashItems = [];
         let environmentItems = [];
         let animationFrameId;
+        let startTime = 0;
+        let endTime = 0;
+        
+        // High score storage
+        let highScores = JSON.parse(localStorage.getItem('tankassHighScores')) || {};
         
         // Trash items
         const correctTrashItems = [
@@ -497,7 +514,12 @@
         const grid = document.getElementById("grid");
         const messageDisplay = document.getElementById("message");
         const finalScoreDisplay = document.getElementById("final-score");
+        const highScoreDisplay = document.getElementById("high-score");
+        const highScoreStartDisplay = document.getElementById("high-score-display");
         const restartBtn = document.getElementById("restart-btn");
+        
+        // Load high scores on start
+        updateHighScoreDisplay();
         
         // Event listeners
         startBtn.addEventListener("click", startGame);
@@ -518,6 +540,7 @@
             lives = 3;
             timeLeft = 45;
             trashLeft = 25;
+            startTime = Date.now();
             
             // Clear any existing items
             trashItems.forEach(item => {
@@ -693,6 +716,7 @@
                 
                 // Check win condition
                 if (trashLeft <= 0) {
+                    endTime = Date.now();
                     endGame(true);
                     return;
                 }
@@ -710,6 +734,7 @@
                 
                 // Check lose condition
                 if (lives <= 0) {
+                    endTime = Date.now();
                     endGame(false);
                     return;
                 }
@@ -734,6 +759,7 @@
             timerDisplay.textContent = timeLeft;
             
             if (timeLeft <= 0) {
+                endTime = Date.now();
                 endGame(false);
             }
         }
@@ -750,6 +776,13 @@
             clearInterval(timerInterval);
             cancelAnimationFrame(animationFrameId);
             
+            // Calculate time taken (in seconds)
+            const timeTaken = Math.round((endTime - startTime) / 1000);
+            const timeUsed = timeLeft > 0 ? (45 - timeLeft) : 45;
+            
+            // Update high scores
+            updateHighScores(score, timeUsed);
+            
             // Show end screen
             gameScreen.style.display = "none";
             endScreen.style.display = "flex";
@@ -757,7 +790,7 @@
             // Set appropriate message
             if (isWin) {
                 messageDisplay.textContent = `You Win, ${playerName}!`;
-                messageDisplay.innerHTML += `<br><span style="font-size: 1.5rem;">Well done! You cleaned it all up!</span>`;
+                messageDisplay.innerHTML += `<br><span style="font-size: 1.5rem;">Well done! You cleaned it all up in ${timeTaken} seconds!</span>`;
                 messageDisplay.style.color = "#ffeb3b";
             } else {
                 messageDisplay.textContent = `Game Over, ${playerName}!`;
@@ -766,13 +799,65 @@
             }
             
             finalScoreDisplay.textContent = `Your final score: ${score}`;
+            
+            // Display high score
+            const playerHighScore = highScores[playerName] || { score: 0, time: 45 };
+            highScoreDisplay.textContent = `Your high score: ${playerHighScore.score} (Time: ${playerHighScore.time}s)`;
+        }
+        
+        function updateHighScores(currentScore, timeUsed) {
+            // Get current high score for player
+            const currentHighScore = highScores[playerName] || { score: 0, time: 45 };
+            
+            // Update if current score is better
+            if (currentScore > currentHighScore.score || 
+               (currentScore === currentHighScore.score && timeUsed < currentHighScore.time)) {
+                highScores[playerName] = {
+                    score: currentScore,
+                    time: timeUsed
+                };
+                
+                // Save to localStorage
+                localStorage.setItem('tankassHighScores', JSON.stringify(highScores));
+            }
+            
+            // Update display
+            updateHighScoreDisplay();
+        }
+        
+        function updateHighScoreDisplay() {
+            if (playerNameInput.value.trim()) {
+                const playerName = playerNameInput.value.trim();
+                const playerHighScore = highScores[playerName];
+                
+                if (playerHighScore) {
+                    highScoreStartDisplay.innerHTML = `
+                        <div id="high-score" style="margin-bottom: 20px;">
+                            Your high score: ${playerHighScore.score} (Time: ${playerHighScore.time}s)
+                        </div>
+                    `;
+                    return;
+                }
+            }
+            
+            highScoreStartDisplay.innerHTML = `
+                <div id="high-score" style="margin-bottom: 20px;">
+                    No high score yet - play to set one!
+                </div>
+            `;
         }
         
         function restartGame() {
             endScreen.style.display = "none";
             startScreen.style.display = "flex";
             startScreen.style.opacity = "1";
+            
+            // Update high score display in case name changed
+            updateHighScoreDisplay();
         }
+        
+        // Update high score display when name changes
+        playerNameInput.addEventListener('input', updateHighScoreDisplay);
     </script>
 </body>
 </html>
