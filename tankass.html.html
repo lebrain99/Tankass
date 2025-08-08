@@ -14,7 +14,7 @@
         body, html {
             width: 100%;
             height: 100%;
-            overflow: hidden;
+            overflow-y: auto;
         }
         
         body {
@@ -22,24 +22,21 @@
             background-color: #e0f7fa;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
         }
         
         #game-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
             background-color: white;
-            overflow: hidden;
         }
         
         /* Start Screen */
         #start-screen {
-            position: absolute;
+            position: relative;
             width: 100%;
-            height: 100%;
+            min-height: 100vh;
             background: linear-gradient(rgba(0, 121, 107, 0.8), rgba(0, 137, 123, 0.8)), 
                         url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><rect width="800" height="600" fill="%2300796b"/><circle cx="200" cy="150" r="80" fill="%23ffd54f"/><path d="M100,400 Q200,300 300,400 T500,400 T700,400" stroke="%2381c784" stroke-width="20" fill="none"/><rect x="150" y="350" width="30" height="150" fill="%235d4037"/><path d="M165,350 Q165,250 180,250 Q195,250 195,350" fill="%232e7d32"/><rect x="450" y="380" width="30" height="120" fill="%235d4037"/><path d="M465,380 Q465,280 480,280 Q495,280 495,380" fill="%232e7d32"/></svg>') center/cover no-repeat;
             display: flex;
@@ -49,7 +46,7 @@
             color: white;
             text-align: center;
             z-index: 100;
-            transition: opacity 0.5s;
+            padding: 40px 20px;
         }
         
         #start-content {
@@ -60,21 +57,27 @@
             max-width: 800px;
             color: #00796b;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            margin: 40px 0;
         }
         
         /* Game Screen */
         #game-screen {
-            position: absolute;
-            width: 100%;
-            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             display: none;
+            overflow: hidden;
         }
         
         /* End Screen */
         #end-screen {
-            position: absolute;
-            width: 100%;
-            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             background-color: rgba(0, 121, 107, 0.9);
             display: none;
             flex-direction: column;
@@ -147,7 +150,7 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><rect width="800" height="600" fill="%23b3e5fc"/><rect y="450" width="800" height="150" fill="%2381c784"/><path d="M0,450 Q200,400 400,450 T800,450" fill="%2366bb6a" opacity="0.8"/><circle cx="100" cy="100" r="40" fill="%23ffd54f"/><circle cx="300" cy="120" r="30" fill="%23ffd54f"/><circle cx="500" cy="80" r="50" fill="%23ffd54f"/><rect x="50" y="430" width="20" height="80" fill="%235d4037"/><path d="M60,430 Q60,350 80,350 Q100,350 100,430" fill="%234caf50"/><rect x="250" y="410" width="20" height="100" fill="%235d4037"/><path d="M260,410 Q260,330 280,330 Q300,330 300,410" fill="%234caf50"/><rect x="450" y="390" width="20" height="120" fill="%235d4037"/><path d="M460,390 Q460,290 480,290 Q500,290 500,390" fill="%234caf50"/></svg>');
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><rect width="800" height="600" fill="%238d6e63"/><rect y="450" width="800" height="150" fill="%235d4037"/><path d="M0,450 Q200,400 400,450 T800,450" fill="%233e2723" opacity="0.8"/><circle cx="100" cy="100" r="40" fill="%23ffd54f"/><circle cx="300" cy="120" r="30" fill="%23ffd54f"/><circle cx="500" cy="80" r="50" fill="%23ffd54f"/><rect x="50" y="430" width="20" height="80" fill="%235d4037"/><path d="M60,430 Q60,350 80,350 Q100,350 100,430" fill="%234caf50"/><rect x="250" y="410" width="20" height="100" fill="%235d4037"/><path d="M260,410 Q260,330 280,330 Q300,330 300,410" fill="%234caf50"/><rect x="450" y="390" width="20" height="120" fill="%235d4037"/><path d="M460,390 Q460,290 480,290 Q500,290 500,390" fill="%234caf50"/><circle cx="150" cy="300" r="15" fill="%23f44336"/><circle cx="350" cy="350" r="15" fill="%23f44336"/><circle cx="550" cy="320" r="15" fill="%23f44336"/><circle cx="200" cy="400" r="15" fill="%23ff9800"/><circle cx="400" cy="380" r="15" fill="%23ff9800"/><circle cx="600" cy="350" r="15" fill="%23ff9800"/><circle cx="100" cy="200" r="10" fill="%23f44336"/><circle cx="700" cy="250" r="10" fill="%23f44336"/><circle cx="400" cy="200" r="10" fill="%23ff9800"/><circle cx="600" cy="150" r="10" fill="%23ff9800"/></svg>');
             background-size: cover;
         }
         
@@ -174,17 +177,18 @@
         
         .trash-item {
             position: absolute;
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 40px;
+            font-size: 50px;
             cursor: pointer;
             z-index: 3;
             will-change: transform;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
             transition: transform 0.2s, opacity 0.3s;
+            margin: 15px;
         }
         
         .trash-item:hover {
@@ -307,11 +311,14 @@
             justify-content: center;
             margin: 20px 0;
             flex-wrap: wrap;
+            gap: 15px;
         }
         
         .example-item {
             margin: 10px;
             text-align: center;
+            flex: 1 0 120px;
+            max-width: 120px;
         }
         
         .example-emoji {
@@ -337,12 +344,15 @@
         
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            grid-template-rows: repeat(5, 1fr);
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 30px;
             position: absolute;
-            width: 100%;
-            height: calc(100% - 60px);
-            top: 60px;
+            width: calc(100% - 60px);
+            height: calc(100% - 100px);
+            top: 80px;
+            left: 30px;
+            padding: 15px;
         }
         
         .grid-cell {
@@ -350,6 +360,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 100px;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
         }
     </style>
 </head>
@@ -443,20 +460,20 @@
         let score = 0;
         let lives = 3;
         let timeLeft = 45;
-        let trashLeft = 25; // Increased trash count
+        let trashLeft = 25;
         let gameInterval;
         let timerInterval;
         let trashItems = [];
         let environmentItems = [];
         let animationFrameId;
         
-        // Trash items - more specific to bottles, papers, oil cans, and polythene
+        // Trash items
         const correctTrashItems = [
-            "🧴", "🍶", "🥤", "🧃", "🍼", // Bottles
-            "📄", "📰", "🧻", "🗞️", "📜", // Papers
-            "🛢️", "🧴", "🪣", "🧂", // Oil cans/containers
-            "🛍️", "🧺", "👜", "🎒", // Polythene/bags
-            "🥫", "🍶", "🧉", "🍵", "🍶" // More containers
+            "🧴", "🍶", "🥤", "🧃", "🍼",
+            "📄", "📰", "🧻", "🗞️", "📜",
+            "🛢️", "🧴", "🪣", "🧂",
+            "🛍️", "🧺", "👜", "🎒",
+            "🥫", "🍶", "🧉", "🍵", "🍶"
         ];
         
         const wrongTrashItems = [
@@ -500,7 +517,7 @@
             score = 0;
             lives = 3;
             timeLeft = 45;
-            trashLeft = 25; // More trash to collect
+            trashLeft = 25;
             
             // Clear any existing items
             trashItems.forEach(item => {
@@ -520,8 +537,8 @@
             // Clear grid
             grid.innerHTML = "";
             
-            // Create grid cells (5x5)
-            for (let i = 0; i < 25; i++) {
+            // Create grid cells (4x4)
+            for (let i = 0; i < 16; i++) {
                 const cell = document.createElement("div");
                 cell.className = "grid-cell";
                 grid.appendChild(cell);
@@ -540,10 +557,10 @@
                 gameScreen.style.display = "block";
                 endScreen.style.display = "none";
                 
-                // Create environment items (fewer distractors)
+                // Create environment items
                 createEnvironment();
                 
-                // Create initial trash items (more trash)
+                // Create initial trash items
                 createInitialTrash();
                 
                 // Start timer
@@ -555,7 +572,7 @@
         }
         
         function createEnvironment() {
-            // Fewer distractors: 4 flowers and 2 trees
+            // Place 4 flowers and 2 trees
             const cells = Array.from(document.querySelectorAll('.grid-cell'));
             
             // Place 4 flowers in random cells
@@ -564,9 +581,9 @@
                 const flower = document.createElement("div");
                 flower.className = "environment-item flower";
                 
-                // Position within cell
-                const x = randomCell.offsetLeft + 20 + Math.random() * (randomCell.offsetWidth - 40);
-                const y = randomCell.offsetTop + 20 + Math.random() * (randomCell.offsetHeight - 40);
+                // Position within cell with more spacing
+                const x = randomCell.offsetLeft + 30 + Math.random() * (randomCell.offsetWidth - 60);
+                const y = randomCell.offsetTop + 30 + Math.random() * (randomCell.offsetHeight - 60);
                 
                 flower.style.left = `${x}px`;
                 flower.style.top = `${y}px`;
@@ -587,9 +604,9 @@
                 const tree = document.createElement("div");
                 tree.className = "environment-item tree";
                 
-                // Position within cell
-                const x = randomCell.offsetLeft + 10;
-                const y = randomCell.offsetTop + 10;
+                // Position within cell with more spacing
+                const x = randomCell.offsetLeft + 20;
+                const y = randomCell.offsetTop + 20;
                 
                 tree.style.left = `${x}px`;
                 tree.style.top = `${y}px`;
@@ -600,11 +617,11 @@
         }
         
         function createInitialTrash() {
-            // More trash: 25 correct and 8 wrong items
+            // Create 25 correct and 8 wrong items
             const cells = Array.from(document.querySelectorAll('.grid-cell'));
             const shuffledCells = [...cells].sort(() => Math.random() - 0.5);
             
-            // Place 25 correct trash items
+            // Place 25 correct trash items (about 1-2 per cell)
             for (let i = 0; i < 25; i++) {
                 const cell = shuffledCells[i % shuffledCells.length];
                 createTrashInCell(cell, true);
@@ -626,8 +643,8 @@
             element.className = `trash-item ${isCorrect ? "correct-trash" : "wrong-trash"}`;
             element.textContent = trashEmoji;
             
-            // Position within cell with padding
-            const padding = 20;
+            // Position within cell with more spacing
+            const padding = 40;
             const x = cell.offsetLeft + padding + Math.random() * (cell.offsetWidth - padding * 2);
             const y = cell.offsetTop + padding + Math.random() * (cell.offsetHeight - padding * 2);
             
@@ -756,17 +773,6 @@
             startScreen.style.display = "flex";
             startScreen.style.opacity = "1";
         }
-        
-        // Add shake animation for wrong clicks
-        const style = document.createElement("style");
-        style.textContent = `
-            @keyframes shake {
-                0%, 100% { transform: translateX(0); }
-                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-                20%, 40%, 60%, 80% { transform: translateX(5px); }
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
